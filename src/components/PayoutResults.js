@@ -1,15 +1,9 @@
 import { useState } from "react"
-import axios from "axios"
 import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 
 const PayoutResults = ({ players, onNewGame }) => {
-    const baseURL = "http://localhost:9000/convert/"
-    const backupURL = "http://localhost:7777/users"
     const [displayPayout, setDisplayPayout] = useState()
     const [startNewGame, setStartNewGame] = useState(false)
-    const [currCurrency, setCurrCurrency] = useState("usd")
-    const [targetCurrency, setTargetCurency] = useState("usd")
-    const [currencyPrefix, setCurrencyPrefix] = useState("$")
     const [playerRecord, setPlayerRecord] = useState("")
     const [name, setName] = useState("")
 
@@ -36,7 +30,6 @@ const PayoutResults = ({ players, onNewGame }) => {
 
         setDisplayPayout(generatePayoutMessages(positives, negatives))
         setStartNewGame(true)
-        backupGame()
     }
 
     const generatePayoutMessages = (positives, negatives) => {
@@ -81,72 +74,6 @@ const PayoutResults = ({ players, onNewGame }) => {
         return messages
     }
 
-
-    // sends get request to currency converter service
-    const convertCurrency = (e) => {
-        e.preventDefault()
-
-        if (currCurrency === targetCurrency) {
-            alert("cannot convert between the same currencies")
-            return
-        }
-
-        displayPayout.map(async (payouts) => {
-            const response = await fetch(baseURL + `${currCurrency}/${targetCurrency}/${payouts.amount}`)
-            payouts.amount = await response.json()
-            setDisplayPayout([...displayPayout])
-        })
-
-        const prefixes = {
-            "usd": "$",
-            "cad": "$",
-            "euro": "\u20AC",
-            "jpy": "\u00A5",
-            "gbp": "\u00A3"
-        }
-
-        setCurrCurrency(targetCurrency)
-        setCurrencyPrefix(prefixes[targetCurrency])
-    }
-
-    // send game data to database for backup
-    function backupGame() {
-        axios({
-            method: "PUT",
-            url: `${backupURL}/${players[0].name}`,
-            headers: {
-                "Accept": "application/json"
-            },
-            data: { "players": players }
-        })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
-
-    // get a user's record
-    function lookupRecord() {
-        axios({
-            method: "GET",
-            url: `${backupURL}/${name}`,
-        })
-            .then(function (response) {
-                const record = `${response.data._id} has a lifetime total of $${response.data.total}`
-                setPlayerRecord(record)
-            })
-            .catch(function (error) {
-                setPlayerRecord("Player record doesn't exist.")
-            })
-    }
-
-    // delete all from database!
-    function deleteRecords() {
-        axios({
-            method: "DELETE",
-            url: backupURL
-        })
-    }
-
     return (
         <>
             <h1>Final Results: </h1>
@@ -182,7 +109,7 @@ const PayoutResults = ({ players, onNewGame }) => {
                         {displayPayout.map((payout) => (
                             <TableRow>
                                 <TableCell>
-                                    {`${payout.payer} owes ${payout.payee}: ${currencyPrefix}${payout.amount}`}
+                                    {`${payout.payer} owes ${payout.payee}: $${payout.amount}`}
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -191,46 +118,6 @@ const PayoutResults = ({ players, onNewGame }) => {
                 <Grid sx={{ my: 2 }}>
                     <Button variant="contained" onClick={onNewGame}> Start a new Rainier Blackjack Game </Button>
                 </Grid>
-
-                {/* Currency Convertor */}
-                <h2> Currency Converter </h2>
-                <Grid>
-                    <Grid item>
-                        <FormControl>
-                            <InputLabel> Currencies </InputLabel>
-                            <Select
-                                value={targetCurrency}
-                                label="Currency"
-                                onChange={(e) => setTargetCurency(e.target.value)}>
-                                <MenuItem value={"usd"}> US Dollar </MenuItem>
-                                <MenuItem value={"cad"}> Canadian Dollar </MenuItem>
-                                <MenuItem value={"euro"}> Euro </MenuItem>
-                                <MenuItem value={"jpy"}> Japenese Yen </MenuItem>
-                                <MenuItem value={"gbp"}> Great Britain Pound </MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item sx={{ my: 2 }}>
-                        <Button variant="contained" onClick={convertCurrency}> Convert to {targetCurrency} </Button>
-                    </Grid>
-                </Grid>
-
-                {/* Player history */}
-                <h2> Player histories </h2>
-                <h3> Search for a player </h3>
-                <p> Please note: player names are case-sensitive </p>
-                <Grid>
-                    <Grid item>
-                        <TextField variant="outlined" label="Player Name" onChange={(e) => setName(e.target.value)} />
-                    </Grid>
-                    <Grid item sx={{ my: 2 }}>
-                        <Button variant="contained" onClick={lookupRecord}> Search {name ? `for ${name}` : ""} </Button>
-                    </Grid>
-                </Grid>
-                {playerRecord && <p>{playerRecord}</p>}
-
-                <h3> Delete all player records </h3>
-                <Button variant="contained" onClick={deleteRecords}> Delete Player Histories </Button>
             </>}
         </>
     )
