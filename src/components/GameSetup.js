@@ -61,7 +61,8 @@ const GameSetup = ({ startGame }) => {
     }
 
     // Handles submitting number of rounds per player
-    const onSaveRounds = () => {
+    const onSaveRounds = (e) => {
+        e.preventDefault()
         if (!isConfirming) {
             setIsConfirming(true)
             return
@@ -124,23 +125,25 @@ const GameSetup = ({ startGame }) => {
 
             {/* Set Number of Rounds */}
             {isAddingRounds && <> <h3>Enter number of times each player will deal:</h3>
-                <Grid container wrap='nowrap' spacing={2} sx={{ width: 95 / 100 }}>
-                    <Grid item>
-                        <TextField label="Rounds" variant="outlined"
-                            onChange={(e) => setRounds(e.target.value)}
-                        />
+                <form>
+                    <Grid container wrap='nowrap' spacing={2} sx={{ width: 95 / 100 }}>
+                        <Grid item>
+                            <TextField label="Rounds" variant="outlined"
+                                onChange={(e) => setRounds(e.target.value)}
+                            />
+                        </Grid>
+                        {rounds && <Grid item sx={{ my: 'auto' }}>
+                            {isConfirming
+                                ?
+                                <ButtonGroup>
+                                    <Button color="warning" size="small" variant="contained" type="submit" onClick={(e) => onSaveRounds(e)}> Yes, Confirm Rounds </Button>
+                                    <Button color="success" size="small" variant="contained" onClick={() => setIsConfirming(false)}> No, Go Back </Button>
+                                </ButtonGroup>
+                                :
+                                <Button color="success" size="small" variant="contained" type="submit" onClick={(e) => onSaveRounds(e)}> Confirm Rounds </Button>}
+                        </Grid>}
                     </Grid>
-                    {rounds && <Grid item sx={{ my: 'auto' }}>
-                        {isConfirming
-                            ?
-                            <ButtonGroup>
-                                <Button color="warning" size="small" variant="contained" type="submit" onClick={onSaveRounds}> Yes, Confirm Rounds </Button>
-                                <Button color="success" size="small" variant="contained" type="submit" onClick={() => setIsConfirming(false)}> No, Go Back </Button>
-                            </ButtonGroup>
-                            :
-                            <Button color="success" size="small" variant="contained" type="submit" onClick={onSaveRounds}> Confirm Rounds </Button>}
-                    </Grid>}
-                </Grid>
+                </form>
             </>}
 
             {/* Ready message and button */}
