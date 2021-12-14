@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, ButtonGroup, TextField, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
 const GameSetup = ({ startGame }) => {
-    const [player, setPlayer] = useState()
+    const [player, setPlayer] = useState("")
     const [players, setPlayers] = useState([])
 
     const [editPlayer, setEditPlayer] = useState({})
@@ -19,6 +19,10 @@ const GameSetup = ({ startGame }) => {
     // Handles adding of new player
     const onNewPlayer = (e) => {
         e.preventDefault()
+        if (player === ""){
+            alert("Player name cannot be blank.")
+            return
+        }
         setPlayerCount(playerCount + 1)
         let newPlayer = { id: playerCount, name: player, total: 0, isDealer: false }
         setPlayers([...players, newPlayer])
