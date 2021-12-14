@@ -21,6 +21,7 @@ const GameSetup = ({ startGame }) => {
         setPlayerCount(playerCount + 1)
         let newPlayer = { id: playerCount, name: player, total: 0, isDealer: false }
         setPlayers([...players, newPlayer])
+        setPlayer("")
     }
 
     // Handles editing player name
@@ -91,7 +92,7 @@ const GameSetup = ({ startGame }) => {
             {isAddingPlayers && <> <h3>Enter player names:</h3>
                 <Grid container wrap='nowrap' spacing={2} sx={{ width: 95 / 100 }}>
                     <Grid item>
-                        <TextField label="Player" variant="outlined"
+                        <TextField label="Player" variant="outlined" value={player}
                             onChange={(e) => setPlayer(e.target.value)}
                         />
                     </Grid>
