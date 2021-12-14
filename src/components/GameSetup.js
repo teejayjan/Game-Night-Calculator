@@ -17,7 +17,8 @@ const GameSetup = ({ startGame }) => {
     const [isStartReady, setIsStartReady] = useState(false)
 
     // Handles adding of new player
-    const onNewPlayer = () => {
+    const onNewPlayer = (e) => {
+        e.preventDefault()
         setPlayerCount(playerCount + 1)
         let newPlayer = { id: playerCount, name: player, total: 0, isDealer: false }
         setPlayers([...players, newPlayer])
@@ -70,7 +71,7 @@ const GameSetup = ({ startGame }) => {
     }
 
     const onStart = () => {
-        startGame({players, rounds})
+        startGame({ players, rounds })
     }
 
     const onReset = () => {
@@ -90,16 +91,18 @@ const GameSetup = ({ startGame }) => {
         <>
             {/* Adding Players */}
             {isAddingPlayers && <> <h3>Enter player names:</h3>
-                <Grid container wrap='nowrap' spacing={2} sx={{ width: 95 / 100 }}>
-                    <Grid item>
-                        <TextField label="Player" variant="outlined" value={player}
-                            onChange={(e) => setPlayer(e.target.value)}
-                        />
+                <form>
+                    <Grid container wrap='nowrap' spacing={2} sx={{ width: 95 / 100 }}>
+                        <Grid item>
+                            <TextField label="Player" variant="outlined" value={player}
+                                onChange={(e) => setPlayer(e.target.value)}
+                            />
+                        </Grid>
+                        <Grid item sx={{ my: 'auto' }}>
+                            <Button size="small" variant="contained" type="submit" onClick={(e) => onNewPlayer(e)}> Add Player </Button>
+                        </Grid>
                     </Grid>
-                    <Grid item sx={{ my: 'auto' }}>
-                        <Button size="small" variant="contained" type="submit" onClick={onNewPlayer}> Add Player </Button>
-                    </Grid>
-                </Grid>
+                </form>
 
                 {playerCount > 2 && <Grid container wrap='nowrap' spacing={2} sx={{ width: 95 / 100, my: 1 }}>
                     {isConfirming
