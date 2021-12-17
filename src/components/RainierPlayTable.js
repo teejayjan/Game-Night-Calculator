@@ -118,21 +118,21 @@ const RainierPlayTable = ({ players, rounds, onGameOver }) => {
             <p> NOTE: If you split, please enter your *net* bet, otherwise enter total amount bet as a positive integer. </p>
             <p> (ex: Player bets $5 and splits their hand; one hand busts and the other pushes. Net loss: $5) </p>
 
-            <TableContainer sx={{ my: 2 }}>
+            <Grid container spacing={{ xs: 1, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                 {/* Player Input */}
-                <TableRow>
-                    <TableCell width="20%">
-                        <Grid>
-                            <h4>Playing Hand #{currHandNum + 1} </h4>
-                        </Grid>
-                        <Button variant="contained" onClick={submitHand}> Submit Hand </Button>
-                    </TableCell>
-                    {players.map((player) => (
-                        <TableCell>
-                            <RainierHandInput handNum={currHandNum} playerID={player.id} setBet={setBet} isDealer={player.isDealer} playerName={player.name}/>
-                        </TableCell>
-                    ))}
-                </TableRow>
+                <Grid item xs={2} sm={4} md={4}>
+                    <h4>Playing Hand #{currHandNum + 1} </h4>
+                    <Button variant="contained" onClick={submitHand}> Submit Hand </Button>
+                </Grid>
+                {players.map((player) => (
+                    <Grid item xs={2} sm={4} md={4}>
+                        <RainierHandInput handNum={currHandNum} playerID={player.id} setBet={setBet} isDealer={player.isDealer} playerName={player.name} />
+                    </Grid>
+                ))}
+            </Grid>
+
+
+            <TableContainer sx={{ my: 2 }}>
                 <Table>
                     {/* Header with player names */}
                     <TableHead>
