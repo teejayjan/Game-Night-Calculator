@@ -15,11 +15,13 @@ const RainierPlayTable = ({ players, rounds, onGameOver }) => {
     // Store the results of the current hand
     const [currHand, setCurrHand] = useState(populateHands())
 
+    const [isHistory, setIsHistory] = useState(false)
+
     // Populate currHand based on number players and their IDs
     function populateHands() {
         let hands = []
         players.forEach(player =>
-            hands.push({ handNum: currHandNum, playerID: player.id, bet: 0, status: null }))
+            hands.push({ handNum: currHandNum, playerID: player.id, bet: 0, status: null, name: player.name }))
         return hands
     }
 
@@ -71,13 +73,13 @@ const RainierPlayTable = ({ players, rounds, onGameOver }) => {
 
         hand.map(player => {
             if (player.status === "win") {
-                results.push({ playerID: player.playerID, result: player.bet, status: player.status })
+                results.push({ playerID: player.playerID, result: player.bet, status: player.status, name: player.name })
             } else if (player.status === "lose") {
-                results.push({ playerID: player.playerID, result: player.bet * -1, status: player.status })
+                results.push({ playerID: player.playerID, result: player.bet * -1, status: player.status, name: player.name })
             } else if (player.status === "push") {
-                results.push({ playerID: player.playerID, result: 0, status: player.status })
+                results.push({ playerID: player.playerID, result: 0, status: player.status, name: player.name })
             } else {
-                results.push({ playerID: player.playerID, result: 0, status: player.status })
+                results.push({ playerID: player.playerID, result: 0, status: player.status, name: player.name })
             }
         })
 
@@ -131,36 +133,53 @@ const RainierPlayTable = ({ players, rounds, onGameOver }) => {
                 ))}
             </Grid>
 
-
             <TableContainer sx={{ my: 2 }}>
                 <Table>
-                    {/* Header with player names */}
+                    {/* Header */}
                     <TableHead>
                         <TableRow>
-                            <TableCell></TableCell>
-                            {players.map((player) => (
-                                <TableCell>{player.name}</TableCell>
-                            ))}
+                            <TableCell>
+                                Player Totals:
+                            </TableCell>
+                            <TableCell>
+                                <Button variant="contained" onClick={() => setIsHistory(!isHistory)}>
+                                    {!isHistory ? "Show History" : "Hide History"}
+                                </Button>
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {/* Player Totals Row */}
-                        <TableRow>
-                            <TableCell width="20%"> Total: </TableCell>
-                            {players.map((player) => (
-                                <TableCell style={{ backgroundColor: (player.total >= 0) ? "#C8F79E" : "#F89693" }} > ${player.total} </TableCell>
-                            ))}
-                        </TableRow>
-
-                        {/* Hand history */}
-                        {handHistory.map((round) => (
+                        {/* Player Totals */}
+                        {players.map((player) => (
                             <TableRow>
-                                <TableCell> Round {round.handNum} </TableCell>
-                                {round.results.map((result) => (
-                                    <TableCell> ${result.result} </TableCell>
-                                ))}
+                                <TableCell>{player.name}</TableCell>
+                                <TableCell style={{ backgroundColor: (player.total >= 0) ? "#C8F79E" : "#F89693" }}>
+                                    ${player.total}
+                                </TableCell>
                             </TableRow>
                         ))}
+
+                        {/* Hand History */}
+                        {isHistory && <> {handHistory.map((round) => (
+                            <>
+                                <TableRow>
+                                    <TableCell>
+                                        <b>Round {round.handNum}</b>
+                                    </TableCell>
+                                    <TableCell></TableCell>
+                                </TableRow>
+                                {round.results.map((player) => (
+                                    <TableRow>
+                                        <TableCell>
+                                            {player.name}
+                                        </TableCell>
+                                        <TableCell style={{ backgroundColor: (player.result >= 0) ? "#C8F79E" : "#F89693" }}>
+                                            ${player.result}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </>
+                        ))} </>}
                     </TableBody>
                 </Table>
             </TableContainer>
