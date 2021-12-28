@@ -76,28 +76,22 @@ const PayoutResults = ({ players, onNewGame }) => {
 
     return (
         <>
-            <h1>Final Results: </h1>
             <TableContainer sx={{ my: 2 }}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell></TableCell>
-                            {players.map((player) => (
-                                <TableCell> {player.name} </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell width="20%"> Total: </TableCell>
-                            {players.map((player) => (
-                                <TableCell style={{ backgroundColor: (player.total >= 0) ? "#C8F79E" : "#F89693" }} > ${player.total} </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableBody>
-                </Table>
+                <TableRow>
+                    <TableCell>
+                        <b>Final Results</b>
+                    </TableCell>
+                    <TableCell></TableCell>
+                </TableRow>
+                {players.map((player) => (
+                    <TableRow>
+                        <TableCell>{player.name}</TableCell>
+                        <TableCell style={{ backgroundColor: (player.total >= 0) ? "#C8F79E" : "#F89693" }}>
+                            ${player.total}
+                        </TableCell>
+                    </TableRow>
+                ))}
             </TableContainer>
-
 
             {/* Calculate Payouts */}
             {!startNewGame && <Button variant="contained" onClick={calculatePayouts}> Calculate Payouts </Button>}
@@ -106,6 +100,11 @@ const PayoutResults = ({ players, onNewGame }) => {
                 {/*  Display Payouts */}
                 <TableContainer>
                     <Table>
+                        <TableRow>
+                            <TableCell>
+                                <b>Payouts:</b>
+                            </TableCell>
+                        </TableRow>
                         {displayPayout.map((payout) => (
                             <TableRow>
                                 <TableCell>
@@ -116,7 +115,7 @@ const PayoutResults = ({ players, onNewGame }) => {
                     </Table>
                 </TableContainer>
                 <Grid sx={{ my: 2 }}>
-                    <Button variant="contained" onClick={onNewGame}> Start a new Rainier Blackjack Game </Button>
+                    <Button variant="contained" onClick={onNewGame}> New Game </Button>
                 </Grid>
             </>}
         </>
