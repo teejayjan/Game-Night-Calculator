@@ -15,10 +15,6 @@ const RainierHandInput = ({ playerName, playerID, setBet, isDealer }) => {
     return (
         <>
             <Grid>
-                {isDealer && <h4> {playerName} is dealing{value && status ? `: $${value} House` : ""} </h4>}
-                {!isDealer && <h4> {playerName}'s bet{value && status ? `: $${value} ${status}` : ""} </h4>}
-            </Grid>
-            <Grid>
                 <TextField style={{ width: 100 }} size="small" type="number" variant="outlined" label="Bet" value={value} onChange={(e) => setValue(e.target.valueAsNumber)} />
             </Grid>
             <Grid sx={{ my: 2 }} >

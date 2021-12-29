@@ -114,6 +114,12 @@ const RainierPlayTable = ({ players, rounds, onGameOver }) => {
         setCurrHand([...currHand])
     }
 
+    // Get player's current bet and status for display in hand-input grid
+    const getBet = (id) => {
+        const currBet = currHand.filter(player => player.playerID === id)
+        return currBet
+    }
+
     return (
         <>
             <p> Each player deals {rounds} hand{(rounds > 1) ? "s" : ""} for a total of {totalRounds} hands. </p>
@@ -128,6 +134,10 @@ const RainierPlayTable = ({ players, rounds, onGameOver }) => {
                 </Grid>
                 {players.map((player) => (
                     <Grid item xs={2} sm={4} md={4}>
+                        <Grid item>
+                            {player.isDealer && <h4>{player.name} is dealing{getBet(player.id)[0].bet && getBet(player.id)[0].status ? `: $${getBet(player.id)[0].bet} House` : ""}</h4>}
+                            {!player.isDealer && <h4>{player.name}'s bet{getBet(player.id)[0].bet && getBet(player.id)[0].status ? `: $${getBet(player.id)[0].bet} ${getBet(player.id)[0].status}` : ""}</h4>}
+                        </Grid>
                         <RainierHandInput handNum={currHandNum} playerID={player.id} setBet={setBet} isDealer={player.isDealer} playerName={player.name} />
                     </Grid>
                 ))}
