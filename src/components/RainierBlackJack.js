@@ -6,7 +6,7 @@ import GameSetup from "./GameSetup";
 
 
 const RainierBlackJack = () => {
-    const [players, setPlayers] = useState()
+    const [players, setPlayers] = useState([])
     const [rounds, setRounds] = useState()
 
     const [gameActive, setGameActive] = useState(false)
@@ -14,7 +14,6 @@ const RainierBlackJack = () => {
 
     // Start Game
     const onStart = ({ players, rounds }) => {
-        // players[0].isDealer = true
         setPlayers(players)
         setRounds(rounds)
         setGameActive(true)
@@ -24,6 +23,12 @@ const RainierBlackJack = () => {
     const onReset = () => {
         setPlayers()
         setRounds()
+        setGameActive(false)
+        setGameOver(false)
+    }
+
+    // new game with same players and rounds
+    const onResetPrefill = () => {
         setGameActive(false)
         setGameOver(false)
     }
@@ -39,7 +44,7 @@ const RainierBlackJack = () => {
             <h1>Rainier Blackjack</h1>
 
             {!gameActive && !gameOver && <>
-                <GameSetup startGame={onStart} />
+                <GameSetup startGame={onStart} p={players} r={rounds}/>
             </>}
 
             {gameActive && !gameOver && <>
@@ -47,7 +52,7 @@ const RainierBlackJack = () => {
             </>}
 
             {gameOver && <>
-                <PayoutResults players={players} onNewGame={onReset} />
+                <PayoutResults players={players} onReset={onReset} onResetPrefill={onResetPrefill}/>
             </>}
         </div>
     )

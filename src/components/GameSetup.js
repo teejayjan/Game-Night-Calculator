@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Button, ButtonGroup, TextField, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
-const GameSetup = ({ startGame }) => {
+const GameSetup = ({ startGame, p, r }) => {
     const [player, setPlayer] = useState("")
-    const [players, setPlayers] = useState([])
+    const [players, setPlayers] = useState(p)
 
     const [editPlayer, setEditPlayer] = useState({})
-    let [playerCount, setPlayerCount] = useState(1)
+    let [playerCount, setPlayerCount] = useState(players.length)
 
-    const [rounds, setRounds] = useState()
+    const [rounds, setRounds] = useState(r)
 
     const [isEditing, setIsEditing] = useState(false)
     const [isConfirming, setIsConfirming] = useState(false)
@@ -24,9 +24,10 @@ const GameSetup = ({ startGame }) => {
             return
         }
         setPlayerCount(playerCount + 1)
-        let newPlayer = { id: playerCount, name: player, total: 0 }
+        let newPlayer = { id: playerCount + 1, name: player, total: 0 }
         setPlayers([...players, newPlayer])
         setPlayer("")
+        console.log(playerCount)
     }
 
     // Handles editing player name
@@ -109,7 +110,7 @@ const GameSetup = ({ startGame }) => {
                     </Grid>
                 </form>
 
-                {playerCount > 2 && <Grid container wrap='nowrap' spacing={2} sx={{ width: 95 / 100, my: 1 }}>
+                {playerCount >= 2 && <Grid container wrap='nowrap' spacing={2} sx={{ width: 95 / 100, my: 1 }}>
                     {isConfirming
                         ?
                         <>
@@ -132,9 +133,7 @@ const GameSetup = ({ startGame }) => {
                 <form>
                     <Grid container wrap='nowrap' spacing={2} sx={{ width: 95 / 100 }}>
                         <Grid item>
-                            <TextField label="Rounds" variant="outlined"
-                                onChange={(e) => setRounds(e.target.value)}
-                            />
+                            <TextField label="Rounds" variant="outlined" value={rounds} onChange={(e) => setRounds(e.target.value)} />
                         </Grid>
                         {rounds && <Grid item sx={{ my: 'auto' }}>
                             {isConfirming

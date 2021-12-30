@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 
-const PayoutResults = ({ players, onNewGame }) => {
+const PayoutResults = ({ players, onReset, onResetPrefill }) => {
     const [displayPayout, setDisplayPayout] = useState()
     const [startNewGame, setStartNewGame] = useState(false)
     const [playerRecord, setPlayerRecord] = useState("")
@@ -115,7 +115,12 @@ const PayoutResults = ({ players, onNewGame }) => {
                     </Table>
                 </TableContainer>
                 <Grid sx={{ my: 2 }}>
-                    <Button variant="contained" onClick={onNewGame}> New Game </Button>
+                    <h4> Create new game with new players: </h4>
+                    <Button variant="contained" onClick={onReset}> New Game </Button>
+                </Grid>
+                <Grid sx={{ my: 2 }}>
+                    <h4> Create new game with current players & rounds prefilled:  </h4>
+                    <Button variant="contained" onClick={onResetPrefill}> New Game </Button>
                 </Grid>
             </>}
         </>
