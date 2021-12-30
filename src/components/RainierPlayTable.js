@@ -9,8 +9,8 @@ const RainierPlayTable = ({ players, rounds, onGameOver }) => {
     // Track the round number of the current hand
     let [currHandNum, setCurrHandNum] = useState(0)
 
-    // Track current dealer; indexes players list to set isDealer boolean
-    let [currDealer, setCurrDealer] = useState(0)
+    // Track current dealer; indexes players list
+    let [currDealer, setCurrDealer] = useState(1)
 
     // Store the results of the current hand
     const [currHand, setCurrHand] = useState(populateHands())
@@ -40,29 +40,23 @@ const RainierPlayTable = ({ players, rounds, onGameOver }) => {
                 return
             }
         }
-
         setCurrHandNum(currHandNum += 1)
 
         if (currHandNum % rounds === 0) {
-            // find current dealer and set to false
-            let index = players.findIndex(({ isDealer }) => isDealer)
-            players[index].isDealer = false
-            // increment current dealer index and set next player isDealer to true
             setCurrDealer(currDealer += 1)
 
-            if (currDealer >= players.length) {
+            if (currHandNum >= players.length * rounds) {
                 onGameOver()
                 const newHand = calculateHand(currHand)
                 setHandHistory([...handHistory, newHand])
                 return
             }
-
-            players[index + 1].isDealer = true
         }
 
         const newHand = calculateHand(currHand)
         setHandHistory([...handHistory, newHand])
         setCurrHand(populateHands())
+
     }
 
     // Calculates payouts for a round
@@ -132,15 +126,16 @@ const RainierPlayTable = ({ players, rounds, onGameOver }) => {
                     <h4>Playing Hand #{currHandNum + 1} </h4>
                     <Button variant="contained" onClick={submitHand}> Submit Hand </Button>
                 </Grid>
-                {players.map((player) => (
+                {players.map((player) => (<>
+                    {console.log(player)}
                     <Grid item xs={2} sm={4} md={4}>
                         <Grid item>
-                            {player.isDealer && <h4>{player.name} is dealing{getBet(player.id)[0].bet && getBet(player.id)[0].status ? `: $${getBet(player.id)[0].bet} House` : ""}</h4>}
-                            {!player.isDealer && <h4>{player.name}'s bet{getBet(player.id)[0].bet && getBet(player.id)[0].status ? `: $${getBet(player.id)[0].bet} ${getBet(player.id)[0].status}` : ""}</h4>}
+                            {player.id === currDealer && <h4>{player.name} is dealing{getBet(player.id)[0].bet && getBet(player.id)[0].status ? `: $${getBet(player.id)[0].bet} House` : ""} </h4>}
+                            {player.id !== currDealer && <h4>{player.name}'s bet{getBet(player.id)[0].bet && getBet(player.id)[0].status ? `: $${getBet(player.id)[0].bet} ${getBet(player.id)[0].status}` : ""} </h4>}
                         </Grid>
-                        <RainierHandInput handNum={currHandNum} playerID={player.id} setBet={setBet} isDealer={player.isDealer} playerName={player.name} />
+                        <RainierHandInput setBet={setBet} player={player} dealerID={currDealer} />
                     </Grid>
-                ))}
+                </>))}
             </Grid>
 
             <TableContainer sx={{ my: 2 }}>

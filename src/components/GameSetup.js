@@ -24,7 +24,7 @@ const GameSetup = ({ startGame }) => {
             return
         }
         setPlayerCount(playerCount + 1)
-        let newPlayer = { id: playerCount, name: player, total: 0, isDealer: false }
+        let newPlayer = { id: playerCount, name: player, total: 0 }
         setPlayers([...players, newPlayer])
         setPlayer("")
     }

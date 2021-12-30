@@ -14,7 +14,7 @@ const RainierBlackJack = () => {
 
     // Start Game
     const onStart = ({ players, rounds }) => {
-        players[0].isDealer = true
+        // players[0].isDealer = true
         setPlayers(players)
         setRounds(rounds)
         setGameActive(true)
