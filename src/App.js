@@ -1,5 +1,5 @@
 import { Router, Route, Switch, useHistory } from "react-router-dom";
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -13,6 +13,18 @@ function App() {
     const history = useHistory();
     const [showRules, setShowRules] = useState(false);
     const [choice, setChoice] = useState("")
+
+    // Warns user that reloading the page will reset state
+    useEffect(() => {
+        const unloadCallback = (e) => {
+            e.preventDefault()
+            e.returnValue = ""
+            return ""
+        };
+
+        window.addEventListener("beforeunload", unloadCallback)
+        return () => window.removeEventListener("beforeunload", unloadCallback)
+    }, [])
 
     // Display-safe titles for rules display
     const gameTitles = {
