@@ -1,10 +1,13 @@
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect } from "react"
 import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import axios from "axios";
 import GlobalState from "./GlobalState"
 
 const PayoutResults = ({ players, onReset, onResetPrefill }) => {
+    const backupURL = "http://localhost:5000"
     const [displayPayout, setDisplayPayout] = useState()
     const [startNewGame, setStartNewGame] = useState(false)
+    const [isBackupSuccess, setIsBackupSuccess] = useState(false)
     const [gState, setGState] = useContext(GlobalState)
 
     console.log(players)
@@ -77,6 +80,27 @@ const PayoutResults = ({ players, onReset, onResetPrefill }) => {
         return messages
     }
 
+    const onBackup = () => {
+        if (!gState.email) {
+            alert("You must provide an email address to backup game data.")
+            return
+        }
+        axios({
+            method: "POST",
+            url: backupURL,
+            headers: {
+                "Accept": "application/json"
+            },
+            data: { "email": gState.email, "players": players }
+        })
+            .then(() => {
+                setIsBackupSuccess(true)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
     return (
         <>
             <TableContainer sx={{ my: 2 }}>
@@ -117,6 +141,11 @@ const PayoutResults = ({ players, onReset, onResetPrefill }) => {
                         ))}
                     </Table>
                 </TableContainer>
+                <Grid sx={{ my: 2 }}>
+                    <h4> Backup game results </h4>
+                    {isBackupSuccess && <p>Backup successful!</p>}
+                    <Button variant="contained" disabled={isBackupSuccess} onClick={onBackup}> Backup </Button>
+                </Grid>
                 <Grid sx={{ my: 2 }}>
                     <h4> Create new game with new players: </h4>
                     <Button variant="contained" onClick={onReset}> New Game </Button>
