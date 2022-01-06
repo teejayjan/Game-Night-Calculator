@@ -4,7 +4,8 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { Box, Button, ButtonGroup, Select, FormControl, InputLabel, MenuItem, Container } from "@mui/material";
+import { Box, Button, ButtonGroup, Select, FormControl, InputLabel, MenuItem, Container, AppBar, Toolbar, IconButton, Typography } from "@mui/material";
+import { MenuIcon } from "@mui/icons-material/Menu"
 import Rules from "./components/Rules";
 import RainierBlackJack from "./components/RainierBlackJack";
 import Footer from "./components/Footer";
@@ -91,6 +92,24 @@ function App() {
 
     return (
         <GlobalState.Provider value={[gState, setGState]}>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}> Game Night Calculator </Typography>
+
+                        {/* Login/History Button */}
+                        {gState.email ?
+                            <>
+                                <ButtonGroup>
+                                    <Button variant="contained" onClick={() => userHistory()}> History </Button>
+                                    <Button variant="contained" onClick={() => logout()}> Logout </Button>
+                                </ButtonGroup>
+                            </>
+                            :
+                            <Login />}
+                    </Toolbar>
+                </AppBar>
+            </Box>
             <Router history={history}>
                 <Switch>
                     {/* Main Menu */}
@@ -98,19 +117,6 @@ function App() {
                         <Container maxWidth="sm">
                             <Box sx={outerBox}>
                                 <Box sx={innerBox}>
-
-                                    {/* Login/History Button */}
-                                    {gState.email ?
-                                        <>
-                                            <p>Good luck {gState.email}!</p>
-                                            <ButtonGroup>
-                                                <Button variant="outlined" onClick={() => userHistory()}> History </Button>
-                                                <Button variant="outlined" onClick={() => logout()}> Logout </Button>
-                                            </ButtonGroup>
-                                        </>
-                                        :
-                                        <Login />}
-
                                     <h1>Game Night Calculator</h1>
                                     <p>Please select a game and an option to continue:</p>
                                     <FormControl fullWidth>

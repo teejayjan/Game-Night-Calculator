@@ -43,7 +43,7 @@ const Login = () => {
 
     return (
         <>
-            <Button variant="outlined" onClick={onOpen}> Login </Button>
+            <Button variant="contained" onClick={onOpen}> Login </Button>
 
             <Modal
                 open={open}

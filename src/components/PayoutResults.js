@@ -1,11 +1,14 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import GlobalState from "./GlobalState"
 
 const PayoutResults = ({ players, onReset, onResetPrefill }) => {
     const [displayPayout, setDisplayPayout] = useState()
     const [startNewGame, setStartNewGame] = useState(false)
-    const [playerRecord, setPlayerRecord] = useState("")
-    const [name, setName] = useState("")
+    const [gState, setGState] = useContext(GlobalState)
+
+    console.log(players)
+    console.log(gState)
 
     const calculatePayouts = () => {
         let positives = []

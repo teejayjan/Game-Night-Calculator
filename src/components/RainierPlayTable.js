@@ -127,7 +127,6 @@ const RainierPlayTable = ({ players, rounds, onGameOver }) => {
                     <Button variant="contained" onClick={submitHand}> Submit Hand </Button>
                 </Grid>
                 {players.map((player) => (<>
-                    {console.log(player)}
                     <Grid item xs={2} sm={4} md={4}>
                         <Grid item>
                             {player.id === currDealer && <h4>{player.name} is dealing{getBet(player.id)[0].bet && getBet(player.id)[0].status ? `: $${getBet(player.id)[0].bet} House` : ""} </h4>}
