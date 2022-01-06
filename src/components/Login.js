@@ -16,7 +16,8 @@ const style = {
 
 const Login = () => {
     const [email, setEmail] = useState("")
-    const [state, setState] = useContext(GlobalState)
+    const [gState, setGState] = useContext(GlobalState)
+    const [isDisabled, setIsDisabled] = useState(true)
     const [open, setOpen] = useState(false)
     const onOpen = () => setOpen(true);
     const onClose = () => setOpen(false)
@@ -24,16 +25,20 @@ const Login = () => {
     const onNewEmail = (e) => {
         e.preventDefault()
 
-        if (!validateEmail(email)) {
-            alert("Please provide a valid email address!")
-            return
-        }
-
-        setState(state => ({ email: email }))
+        setGState({ email: email })
     }
 
     const validateEmail = (email) => {
         return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+    }
+
+    const handleInput = (input) => {
+        setEmail(input)
+        if (validateEmail(email)) {
+            setIsDisabled(false)
+        } else {
+            setIsDisabled(true)
+        }
     }
 
     return (
@@ -55,10 +60,10 @@ const Login = () => {
                     </Grid>
                     <form>
                         <Grid item>
-                            <TextField label="email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <TextField label="email" variant="outlined" value={email} onChange={(e) => handleInput(e.target.value)} />
                         </Grid>
                         <Grid item sx={{ my: 'auto' }}>
-                            <Button sx={{ my: 1 }} variant="contained" type="submit" onClick={(e) => onNewEmail(e)}> Login </Button>
+                            <Button sx={{ my: 1 }} variant="contained" type="submit" disabled={isDisabled} onClick={(e) => onNewEmail(e)}> Login </Button>
                         </Grid>
                     </form>
                 </Box>

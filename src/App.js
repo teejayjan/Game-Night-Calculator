@@ -13,7 +13,7 @@ import GlobalState from "./components/GlobalState";
 
 function App() {
     const history = useHistory();
-    const [state, setState] = useState({})
+    const [gState, setGState] = useState({})
     const [showRules, setShowRules] = useState(false);
     const [choice, setChoice] = useState("")
 
@@ -59,6 +59,16 @@ function App() {
         }
     }
 
+    // User History
+    const userHistory = () => {
+
+    }
+
+    // Logout
+    const logout = () => {
+        setGState("")
+    }
+
     // Box configurations
     const outerBox = {
         mt: 5,
@@ -80,7 +90,7 @@ function App() {
     }
 
     return (
-        <GlobalState.Provider value={[state, setState]}>
+        <GlobalState.Provider value={[gState, setGState]}>
             <Router history={history}>
                 <Switch>
                     {/* Main Menu */}
@@ -90,12 +100,12 @@ function App() {
                                 <Box sx={innerBox}>
 
                                     {/* Login/History Button */}
-                                    {state.email ?
+                                    {gState.email ?
                                         <>
-                                            <p>Good luck {state.email}!</p>
+                                            <p>Good luck {gState.email}!</p>
                                             <ButtonGroup>
-                                                <Button variant="outlined"> History </Button>
-                                                <Button variant="outlined"> Logout </Button>
+                                                <Button variant="outlined" onClick={() => userHistory()}> History </Button>
+                                                <Button variant="outlined" onClick={() => logout()}> Logout </Button>
                                             </ButtonGroup>
                                         </>
                                         :
