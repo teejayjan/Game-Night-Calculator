@@ -8,9 +8,12 @@ import { Box, Button, ButtonGroup, Select, FormControl, InputLabel, MenuItem, Co
 import Rules from "./components/Rules";
 import RainierBlackJack from "./components/RainierBlackJack";
 import Footer from "./components/Footer";
+import Login from "./components/Login";
+import GlobalState from "./components/GlobalState";
 
 function App() {
     const history = useHistory();
+    const [state, setState] = useState({})
     const [showRules, setShowRules] = useState(false);
     const [choice, setChoice] = useState("")
 
@@ -77,52 +80,67 @@ function App() {
     }
 
     return (
-        <Router history={history}>
-            <Switch>
-                {/* Main Menu */}
-                <Route exact path="/" >
-                    <Container maxWidth="sm">
+        <GlobalState.Provider value={[state, setState]}>
+            <Router history={history}>
+                <Switch>
+                    {/* Main Menu */}
+                    <Route exact path="/" >
+                        <Container maxWidth="sm">
+                            <Box sx={outerBox}>
+                                <Box sx={innerBox}>
+
+                                    {/* Login/History Button */}
+                                    {state.email ?
+                                        <>
+                                            <p>Good luck {state.email}!</p>
+                                            <ButtonGroup>
+                                                <Button variant="outlined"> History </Button>
+                                                <Button variant="outlined"> Logout </Button>
+                                            </ButtonGroup>
+                                        </>
+                                        :
+                                        <Login />}
+
+                                    <h1>Game Night Calculator</h1>
+                                    <p>Please select a game and an option to continue:</p>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="gameSelect"> Options </InputLabel>
+                                        <Select
+                                            labelId="gameSelectLabel"
+                                            id="gameSelect"
+                                            value={choice}
+                                            label="Choice"
+                                            onChange={(e) => setChoice(e.target.value)}
+                                        >
+                                            <MenuItem value={"rainier-blackjack"}> Rainier Blackjack </MenuItem>
+                                            <MenuItem value={"under-construction"}> Additional games under construction! </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    <ButtonGroup variant="contained" sx={{ my: 2 }}>
+                                        <Button type="submit" onClick={beginGame}> Start New Game </Button>
+                                        <Button type="submit" onClick={displayRules}> {!showRules ? "Display Rules" : "Hide Rules"} </Button>
+                                    </ButtonGroup>
+                                    {showRules && <Rules game={gameTitles[choice]} />}
+                                    <Footer />
+                                </Box>
+                            </Box>
+                        </Container>
+                    </Route>
+
+                    {/* Rainier Blackjack Game Screen */}
+                    <Container >
                         <Box sx={outerBox}>
                             <Box sx={innerBox}>
-                                <h1>Game Night Calculator</h1>
-                                <p>Please select a game and an option to continue:</p>
-                                <FormControl fullWidth>
-                                    <InputLabel id="gameSelect"> Options </InputLabel>
-                                    <Select
-                                        labelId="gameSelectLabel"
-                                        id="gameSelect"
-                                        value={choice}
-                                        label="Choice"
-                                        onChange={(e) => setChoice(e.target.value)}
-                                    >
-                                        <MenuItem value={"rainier-blackjack"}> Rainier Blackjack </MenuItem>
-                                        <MenuItem value={"under-construction"}> Additional games under construction! </MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <ButtonGroup variant="contained" sx={{ my: 2 }}>
-                                    <Button type="submit" onClick={beginGame}> Start New Game </Button>
-                                    <Button type="submit" onClick={displayRules}> {!showRules ? "Display Rules" : "Hide Rules"} </Button>
-                                </ButtonGroup>
-                                {showRules && <Rules game={gameTitles[choice]} />}
-                                <Footer/>
+                                <Route exact path="/rainierblackjack">
+                                    <RainierBlackJack />
+                                    <Footer />
+                                </Route>
                             </Box>
                         </Box>
                     </Container>
-                </Route>
-
-                {/* Rainier Blackjack Game Screen */}
-                <Container >
-                    <Box sx={outerBox}>
-                        <Box sx={innerBox}>
-                            <Route exact path="/rainierblackjack">
-                                <RainierBlackJack />
-                                <Footer/>
-                            </Route>
-                        </Box>
-                    </Box>
-                </Container>
-            </Switch>
-        </Router >
+                </Switch>
+            </Router >
+        </GlobalState.Provider>
     );
 }
 
