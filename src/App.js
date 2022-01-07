@@ -11,6 +11,7 @@ import RainierBlackJack from "./components/RainierBlackJack";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
 import GlobalState from "./components/GlobalState";
+import History from "./components/History";
 
 function App() {
     const history = useHistory();
@@ -60,11 +61,6 @@ function App() {
         }
     }
 
-    // User History
-    const userHistory = () => {
-
-    }
-
     // Logout
     const logout = () => {
         setGState("")
@@ -101,7 +97,7 @@ function App() {
                         {gState.email ?
                             <>
                                 <ButtonGroup>
-                                    <Button variant="contained" onClick={() => userHistory()}> History </Button>
+                                    <History/>
                                     <Button variant="contained" onClick={() => logout()}> Logout </Button>
                                 </ButtonGroup>
                             </>

@@ -16,4 +16,19 @@ recordRoutes.route("/").post(function (req, response) {
     })
 })
 
+recordRoutes.route("/:email").get(function (req, res) {
+    let db_connect = dbo.getDb()
+    let myquery = { email: req.params.email }
+    db_connect
+        .collection("gnc_history")
+        .find(myquery)
+        .toArray(function (err, result) {
+            if (err) {
+                res.status(400).send("No results found")
+            } else {
+                res.json(result)
+            }
+        })
+})
+
 module.exports = recordRoutes
