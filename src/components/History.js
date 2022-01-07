@@ -31,7 +31,6 @@ const History = () => {
         })
             .then(function (response) {
                 setHistory(response.data)
-                console.log(history)
             })
             .catch(function (error) {
                 console.log(error)
@@ -78,6 +77,7 @@ const History = () => {
                             <h2> {gState.email}'s Game History </h2>
                         </Grid>
                     </Grid>
+                    { history.length === 0 && <p> It doesn't look like you've saved any games! </p>}
                     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
                         {history.map((game) => {
                             return (

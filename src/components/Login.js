@@ -45,18 +45,14 @@ const Login = () => {
         <>
             <Button variant="contained" onClick={onOpen}> Login </Button>
 
-            <Modal
-                open={open}
-                onClose={onClose}
-            >
+            <Modal open={open} onClose={onClose} >
                 <Box sx={style}>
                     <Grid container wrap='nowrap' spacing={2} sx={{ width: 95 / 100 }}>
                         <Grid item>
                             <h2>Game History</h2>
                             <p>Providing your email address will allow you to track your history across multiple games.</p>
-                            <p>Addresses are saved in a secure database.</p>
+                            <p>Addresses are saved in a secure database and we won't actually send you anything. Emails are used as a unique identifier in our database.</p>
                         </Grid>
-
                     </Grid>
                     <form>
                         <Grid item>
