@@ -120,21 +120,27 @@ const RainierPlayTable = ({ players, rounds, onGameOver }) => {
             <p> NOTE: If you split, please enter your *net* bet, otherwise enter total amount bet as a positive integer. </p>
             <p> (ex: Player bets $5 and splits their hand; one hand busts and the other pushes. Net loss: $5) </p>
 
-            <Grid container spacing={{ xs: 1, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                {/* Player Input */}
-                <Grid item xs={2} sm={4} md={4}>
-                    <h4>Playing Hand #{currHandNum + 1} </h4>
+            <Grid container spacing={{ xs: 1, md: 1 }}>
+                {/* Round Number & Submit Button */}
+                {/* TODO: Make this float to the bottom of the screen (1) if on mobile and (2) all player bets have been submitted */}
+
+                <Grid item xs={12}>
+                    <h4> Playing Hand #{currHandNum + 1} </h4>
+                    {/* TODO: Add confirmation step to hand submission */}
                     <Button variant="contained" onClick={submitHand}> Submit Hand </Button>
                 </Grid>
-                {players.map((player) => (<>
-                    <Grid item xs={2} sm={4} md={4}>
-                        <Grid item>
+
+                {players.map((player) =>
+                    <Grid container item xs={12}>
+                        <Grid item xs={12}>
                             {player.id === currDealer && <h4>{player.name} is dealing{getBet(player.id)[0].bet && getBet(player.id)[0].status ? `: $${getBet(player.id)[0].bet} House` : ""} </h4>}
                             {player.id !== currDealer && <h4>{player.name}'s bet{getBet(player.id)[0].bet && getBet(player.id)[0].status ? `: $${getBet(player.id)[0].bet} ${getBet(player.id)[0].status}` : ""} </h4>}
                         </Grid>
-                        <RainierHandInput setBet={setBet} player={player} dealerID={currDealer} />
+                        <Grid item xs={12}>
+                            <RainierHandInput setBet={setBet} player={player} dealerID={currDealer} />
+                        </Grid>
                     </Grid>
-                </>))}
+                )}
             </Grid>
 
             <TableContainer sx={{ my: 2 }}>

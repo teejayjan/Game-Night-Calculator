@@ -21,27 +21,29 @@ const RainierHandInput = ({ setBet, player, dealerID }) => {
             setValue("")
             setStatus("")
         }
-    }) 
+    })
 
     return (
         <>
-            <Grid>
-                <TextField style={{ width: 100 }} size="small" type="number" variant="outlined" label="Bet" value={value} onChange={(e) => setValue(e.target.valueAsNumber)} />
-            </Grid>
-            <Grid sx={{ my: 2 }} >
-                {playerID === dealerID ?
-                    <> <Button size="small" variant="contained" onClick={(e) => onSubmit(e, "dealer")}> Confirm </Button> </>
-                    :
-                    <>
-                        <ButtonGroup>
-                            <Button size="small" variant="contained" color="success" onClick={(e) => onSubmit(e, "win")}> Win </Button>
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            <Button size="small" variant="contained" color="error" onClick={(e) => onSubmit(e, "lose")}> Lose </Button>
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            <Button size="small" variant="contained" color="warning" onClick={(e) => onSubmit(e, "push")}> Push </Button>
-                        </ButtonGroup> </>}
+            <Grid container spacing={{ xs: 1, md: 2 }}>
+                <Grid item xs={4}>
+                    <TextField style={{ width: 100 }} size="small" type="number" variant="outlined" label="Bet" value={value} onChange={(e) => setValue(e.target.valueAsNumber)} />
+                </Grid>
+                <Grid item xs={8} align="left">
+                    {playerID === dealerID ?
+                        <> <Button size="small" variant="contained" onClick={(e) => onSubmit(e, "dealer")}> Confirm </Button> </>
+                        :
+                        <>
+                            <ButtonGroup>
+                                <Button size="small" variant="contained" color="success" onClick={(e) => onSubmit(e, "win")}> Win </Button>
+                            </ButtonGroup>
+                            <ButtonGroup>
+                                <Button size="small" variant="contained" color="error" onClick={(e) => onSubmit(e, "lose")}> Lose </Button>
+                            </ButtonGroup>
+                            <ButtonGroup>
+                                <Button size="small" variant="contained" color="warning" onClick={(e) => onSubmit(e, "push")}> Push </Button>
+                            </ButtonGroup> </>}
+                </Grid>
             </Grid>
         </>
     )
